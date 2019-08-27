@@ -121,7 +121,7 @@ ax.grid(True)
 ax.plot(df_adjustOHLC.index, df_adjustOHLC['CLOSE']) 
 plt.show()
 ```
-![linegraph1](./images/linegraph1.jpg)
+![linegraph1](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/linegraph1.jpg)
 
 ### Plot the Daily Closing Price and Stock Volume
 
@@ -149,10 +149,10 @@ top.set_ylabel('Adj Closing Price')
 bottom.set_ylabel('Volume')
 ```
 It will show the following graph.
-![linegraphwithvolume1](./images/linegraphwithvolume1.jpg)
+![linegraphwithvolume1](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/linegraphwithvolume1.jpg)
 
 You can use zoom from toolbar to zoom the graph.
-![linegraphwithvolume2](./images/linegraphwithvolume2.jpg)
+![linegraphwithvolume2](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/linegraphwithvolume2.jpg)
 
 ### Generate a Histogram of the Daily Closing Price
 
@@ -166,7 +166,7 @@ graph=sns.distplot(df['CLOSE'].dropna(), bins=50, color='green')
 graph.set_title(itemName)
 plt.show()
 ```
-![seborn1](./images/seborn1.jpg)
+![seborn1](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/seborn1.jpg)
 
 ## Plot the CandleStick OHLC Chart
 
@@ -236,13 +236,13 @@ df=df_adjustOHLC.loc['2019-01-01':datetime.now(),:]
 pandas_candlestick_ohlc(df,item_name=itemName)
 ```
 It shows the following CandleStick chart from 01/01/2019.
-![candlestick1](./images/ohlccandlestick1.JPG)
+![candlestick1](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/ohlccandlestick1.JPG)
 
 You can use zoom and pan from toolbar to review the graph.
-![candlestick1](./images/ohlccandlestick2.JPG)
+![candlestick1](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/ohlccandlestick2.JPG)
 
 Considering the CandleStick chart.
-![candlestick3](./images/ohlccandlestick3.JPG)
+![candlestick3](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/ohlccandlestick3.JPG)
 
 From a candlestick chart(zoom the graph), a green candlestick indicates a day where the closing price was higher than the open(Gain), while a red candlestick indicates a day where the open was higher than the close (Loss). The wicks indicate the high and the low, and the body the open and close (hue is used to determine which end of the body is open and which the close). You can change the color in pandas_candlestick_ohlc function we have created. And as I said previously, a user can use Candlestick charts for technical analysis and use them to make trading decisions, depending on the shape, color, and position of the candles. We will not cover a technical analysis in this example.
 
@@ -259,7 +259,7 @@ df=df_adjustOHLC.loc['2018-01-01':datetime.now(),:]
 pandas_candlestick_ohlc(df, otherseries = "SMA20d",item_name=itemName)
 ```
 This generate the CandleStick chart and plot the SMA 20 day on the Chart.
-![candlestickma1](./images/candlestickma1.JPG)
+![candlestickma1](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/candlestickma1.JPG)
 
 Moving averages lag behind current price action because they are based on past prices; the longer the time period for the moving average, the greater the lag. Thus, a 200-day MA will have a much greater degree of lag than a 20-day MA because it contains prices for the past 200 days.
 
@@ -274,7 +274,7 @@ df_adjustOHLC["SMA200d"] = np.round(df_adjustOHLC["CLOSE"].rolling(window=200, c
 df=df_adjustOHLC.loc['2018-01-01':'2019-08-05',:]
 pandas_candlestick_ohlc(df, otherseries = ["SMA20d","SMA50d","SMA75d","SMA200d"],item_name=itemName)
 ```
-![candlestickma2](./images/candlestickma2.JPG)
+![candlestickma2](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/candlestickma2.JPG)
 
 There are other types of Moving Average that user can apply with the dataframe to calculate the average value. Many of python open-source package provide the method to calculate MA and [Ta-Lib](https://mrjbq7.github.io/ta-lib/) is one of the libraries which support the calculation and you may try it with the data from the Eikon Data API. However, we do not cover in this example.
 
