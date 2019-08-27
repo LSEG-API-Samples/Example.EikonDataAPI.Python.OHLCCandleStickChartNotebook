@@ -121,7 +121,7 @@ ax.grid(True)
 ax.plot(df_adjustOHLC.index, df_adjustOHLC['CLOSE']) 
 plt.show()
 ```
-![linegraph1](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/linegraph1.jpg)
+![linegraph1](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/linegraph1.JPG)
 
 ### Plot the Daily Closing Price and Stock Volume
 
@@ -149,10 +149,10 @@ top.set_ylabel('Adj Closing Price')
 bottom.set_ylabel('Volume')
 ```
 It will show the following graph.
-![linegraphwithvolume1](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/linegraphwithvolume1.jpg)
+![linegraphwithvolume1](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/linegraphwithvolume1.JPG)
 
 You can use zoom from toolbar to zoom the graph.
-![linegraphwithvolume2](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/linegraphwithvolume2.jpg)
+![linegraphwithvolume2](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/linegraphwithvolume2.JPG)
 
 ### Generate a Histogram of the Daily Closing Price
 
@@ -166,7 +166,7 @@ graph=sns.distplot(df['CLOSE'].dropna(), bins=50, color='green')
 graph.set_title(itemName)
 plt.show()
 ```
-![seborn1](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/seborn1.jpg)
+![seborn1](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/seborn1.JPG)
 
 ## Plot the CandleStick OHLC Chart
 
