@@ -1,4 +1,4 @@
-# Generating CandleStick Chart using TimeSeries data from Eikon data API
+# Generate CandleStick Chart using TimeSeries data from Eikon data API
 
 ## Overview
 
