@@ -121,7 +121,7 @@ ax.grid(True)
 ax.plot(df_adjustOHLC.index, df_adjustOHLC['CLOSE']) 
 plt.show()
 ```
-![linegraph1](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/linegraph1.JPG)
+![linegraph1](./images/linegraph1.JPG)
 
 ### Plot the Daily Closing Price and Stock Volume
 
@@ -130,29 +130,36 @@ It may useful to review a trading volume to spot for spikes in trading. We can a
 ```python
 df=df_adjustOHLC[['CLOSE','VOLUME']].loc['2018-01-01':datetime.now(),:]
 
-fig = plt.figure(figsize=(9,8),dpi=100)
-top = plt.subplot2grid((4,4), (0, 0), rowspan=3, colspan=4)
-top.grid(True)
+#top graph for daily close price and bottom one is bar graph for stock volumen.
 
+#Set figure size
+fig = plt.figure(figsize=(9,8),dpi=100)
+
+# Set subplot size to 4 row x4 col top graph start from 0,0 to row 3 and last low is for volume
+top = plt.subplot2grid((4,4), (0, 0), rowspan=3, colspan=4)
+top.plot(df.index, df['CLOSE'], label='Close')
+top.grid(True)
+titletxt='Close price for '+itemName
+top.set_title(titletxt)
+top.axes.get_xaxis().set_visible(False)
+#set legend to upper left(2)
+plt.legend(loc=2)
+
+
+#bottom graph(volume) start from row 3, col 0 cover size for 1 last row with 4 column.
 #set sharex to top so we can zoom or pan both graph
 bottom = plt.subplot2grid((4,4), (3,0), rowspan=1, colspan=4,sharex=top)
 bottom.grid(True)
-
-#top graph for daily close price and bottom one is bar graph for stock volumen.
-top.plot(df.index, df['CLOSE']) 
 bottom.bar(df.index, df['VOLUME']) 
- 
-# set the labels
-top.axes.get_xaxis().set_visible(False)
-top.set_title(itemName)
-top.set_ylabel('Adj Closing Price')
-bottom.set_ylabel('Volume')
+plt.title('Trade Volume')
+
+plt.subplots_adjust(hspace=0.75)
 ```
 It will show the following graph.
-![linegraphwithvolume1](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/linegraphwithvolume1.JPG)
+![linegraphwithvolume1](./images/linegraphwithvolume1.JPG)
 
 You can use zoom from toolbar to zoom the graph.
-![linegraphwithvolume2](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/linegraphwithvolume2.JPG)
+![linegraphwithvolume2](./images/linegraphwithvolume2.JPG)
 
 ### Generate a Histogram of the Daily Closing Price
 
@@ -166,13 +173,13 @@ graph=sns.distplot(df['CLOSE'].dropna(), bins=50, color='green')
 graph.set_title(itemName)
 plt.show()
 ```
-![seborn1](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/seborn1.JPG)
+![seborn1](./images/seborn1.JPG)
 
 ## Plot the CandleStick OHLC Chart
 
 Next step we will generate a CandleStick using method candlestick_ohlc from mpl_finance library. Please note that from details in this [link](https://matplotlib.org/api/finance_api.html), module matplotlib.finance is deprecated in 2.0 and has been moved to a module called mpl_finance. It's still working when we have matplotlib version 2.1.2 but this may stop working in any future releases, however, you still be able to use mpl_finance module to use this feature. Note that mpl_finance is no longer maintained.  
 
-To generate the graph we need to pass a dataframe column which contain Open, High, Low and Close price to the method. And there are some additional steps to configuring a tick locating and formatting before plotting the graph. Hence we will add these steps to a new function instead so it can do formatting and generating a graph and then we can re-use this function to plot a moving average later.
+To generate the graph we need to pass a dataframe column which contain Open, High, Low and Close price to the method. And there are some additional steps to configuring a tick locating and formatting before plotting the graph. Hence we will add these steps to a new function instead so it can do formatting and generating a graph and then we can re-use this function to plot a moving average later. Note that below function created based on the [example codes](https://matplotlib.org/examples/pylab_examples/finance_demo.html) provided on [Matplotlib page](https://matplotlib.org).
 
 ```python
 from matplotlib.dates import DateFormatter, WeekdayLocator,DayLocator, MONDAY
@@ -180,30 +187,24 @@ from mpl_finance import candlestick_ohlc
  
 def pandas_candlestick_ohlc(dat, otherseries = None,item_name=None):
     
-    mondays = WeekdayLocator(MONDAY)    
-    alldays = DayLocator()        
-    dayFormatter = DateFormatter('%d') 
+    mondays = WeekdayLocator(MONDAY)    # major ticks on the mondays
+    alldays = DayLocator()              # minor ticks on the days
+    weekFormatter = DateFormatter('%b %d')  # e.g., Jan 12
+    dayFormatter = DateFormatter('%d')      # e.g., 12
     
     plotdat = dat.loc[:,["OPEN", "HIGH", "LOW", "CLOSE"]]
     stick=1
-
+    
+    #Set figure size
     fig = plt.figure(figsize=(10,8),dpi=100)
-    top=plt.subplot2grid((4,4), (0, 0), rowspan=3, colspan=4)
-    top.set_ylabel('Adj Closing Price')
-    bottom = plt.subplot2grid((4,4), (3,0), rowspan=1, colspan=4,sharex=top)
-    
+    top=plt.subplot2grid((5,4), (0, 0), rowspan=4, colspan=4)  
     fig.subplots_adjust(bottom=0.2)
-    
-    if plotdat.index[-1] - plotdat.index[0] < pd.Timedelta('366 days'):
-        weekFormatter = DateFormatter('%b %d')  # e.g., Jan 12
-        top.xaxis.set_major_locator(mondays)
-        top.xaxis.set_minor_locator(alldays)
-    else:
-        weekFormatter = DateFormatter('%b %d, %Y')
-        
-    top.xaxis.set_major_formatter(weekFormatter)
-    top.set_title(item_name)
-    bottom.grid(True)
+    top.xaxis.set_major_locator(mondays)
+    top.xaxis.set_minor_locator(alldays)
+    top.xaxis.set_major_formatter(weekFormatter)    
+    titletxt='CandleStick Chart for '+itemName
+    top.set_title(titletxt)
+
     
     # Create the candelstick chart
     candlestick_ohlc(top, list(zip(list(dates.date2num(plotdat.index.tolist())), plotdat["OPEN"].tolist(), plotdat["HIGH"].tolist(),
@@ -219,11 +220,14 @@ def pandas_candlestick_ohlc(dat, otherseries = None,item_name=None):
     top.xaxis_date()
     top.autoscale_view()
     top.grid(True)
-    plt.setp(plt.gca().get_xticklabels(), rotation=45, horizontalalignment='right')
     top.axes.get_xaxis().set_visible(False)
-   
+    
+    bottom = plt.subplot2grid((5,4), (4,0), rowspan=1, colspan=4,sharex=top)
     bottom.bar(dat.index, dat['VOLUME'])
-    bottom.set_ylabel('Volume')
+    bottom.grid(True)
+    plt.title('Trade Volume')
+    plt.subplots_adjust(hspace=0.75)
+    plt.setp(plt.gca().get_xticklabels(), rotation=45, horizontalalignment='right')
     plt.show()
 ```
 We need to call pandas_candlestick_ohlc and pass a dataframe return from ek.get_timeseries to generate a CandleStick chart.
@@ -236,13 +240,13 @@ df=df_adjustOHLC.loc['2019-01-01':datetime.now(),:]
 pandas_candlestick_ohlc(df,item_name=itemName)
 ```
 It shows the following CandleStick chart from 01/01/2019.
-![candlestick1](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/ohlccandlestick1.JPG)
+![candlestick1](./images/ohlccandlestick1.JPG)
 
 You can use zoom and pan from toolbar to review the graph.
-![candlestick1](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/ohlccandlestick2.JPG)
+![candlestick1](./images/ohlccandlestick2.JPG)
 
-Considering the CandleStick chart.
-![candlestick3](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/ohlccandlestick3.JPG)
+CandleStick chart from a shorter peroid.
+![candlestick3](./images/ohlccandlestick3.JPG)
 
 From a candlestick chart(zoom the graph), a green candlestick indicates a day where the closing price was higher than the open(Gain), while a red candlestick indicates a day where the open was higher than the close (Loss). The wicks indicate the high and the low, and the body the open and close (hue is used to determine which end of the body is open and which the close). You can change the color in pandas_candlestick_ohlc function we have created. And as I said previously, a user can use Candlestick charts for technical analysis and use them to make trading decisions, depending on the shape, color, and position of the candles. We will not cover a technical analysis in this example.
 
@@ -259,7 +263,7 @@ df=df_adjustOHLC.loc['2018-01-01':datetime.now(),:]
 pandas_candlestick_ohlc(df, otherseries = "SMA20d",item_name=itemName)
 ```
 This generate the CandleStick chart and plot the SMA 20 day on the Chart.
-![candlestickma1](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/candlestickma1.JPG)
+![candlestickma1](./images/candlestickma1.JPG)
 
 Moving averages lag behind current price action because they are based on past prices; the longer the time period for the moving average, the greater the lag. Thus, a 200-day MA will have a much greater degree of lag than a 20-day MA because it contains prices for the past 200 days.
 
@@ -274,7 +278,7 @@ df_adjustOHLC["SMA200d"] = np.round(df_adjustOHLC["CLOSE"].rolling(window=200, c
 df=df_adjustOHLC.loc['2018-01-01':'2019-08-05',:]
 pandas_candlestick_ohlc(df, otherseries = ["SMA20d","SMA50d","SMA75d","SMA200d"],item_name=itemName)
 ```
-![candlestickma2](https://raw.githubusercontent.com/Refinitiv-API-Samples/Example.EikonDataAPI.Python.OHLCCandleStickChartNotebook/master/images/candlestickma2.JPG)
+![candlestickma2](./images/candlestickma2.JPG)
 
 There are other types of Moving Average that user can apply with the dataframe to calculate the average value. Many of python open-source package provide the method to calculate MA and [Ta-Lib](https://mrjbq7.github.io/ta-lib/) is one of the libraries which support the calculation and you may try it with the data from the Eikon Data API. However, we do not cover in this example.
 
@@ -287,5 +291,6 @@ This example provides sample codes to call Eikon Data API for retrieving a Time 
 
 * [Eikon Data API Quick Start Guide](https://developers.refinitiv.com/eikon-apis/eikon-data-api/quick-start)
 * [Eikon Data API for Python Developer guide](https://docs-developers.refinitiv.com/1565330791086/14684/book/en/index.html)
+* [Matplotlib Examples](https://matplotlib.org/examples/pylab_examples/finance_demo.html)
 * [What Is a Moving Average Article.](https://www.investopedia.com/terms/m/movingaverage.asp)
 * [Seborn Tutorial](https://seaborn.pydata.org/tutorial/distributions.html)
