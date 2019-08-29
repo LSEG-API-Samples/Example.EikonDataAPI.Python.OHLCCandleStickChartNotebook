@@ -158,6 +158,10 @@ plt.subplots_adjust(hspace=0.75)
 It will show the following graph.
 ![linegraphwithvolume1](./images/linegraphwithvolume1.JPG)
 
+You can use zoom and pan button from tool bar under the graph to see the graph for specific period of time. 
+![toolbar](./images/graphtoolbar.JPG)
+
+Using zoom button to zoom the graph. The volume will be adjusted automatically because we set **shrex=top** in subplot2grid function. 
 You can use zoom from toolbar to zoom the graph.
 ![linegraphwithvolume2](./images/linegraphwithvolume2.JPG)
 
