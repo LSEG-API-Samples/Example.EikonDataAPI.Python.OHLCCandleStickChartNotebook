@@ -1,5 +1,6 @@
 # Generate CandleStick Chart using TimeSeries data from Eikon data API
 
+
 ## Overview
 
 Basically, Eikon Data API provides the functionality to request a Time Series data for Eikon developer so a user can use the data for fundamental historical data analysis or technical analysis. They can also use the data to illustrate market movements. 
@@ -16,22 +17,11 @@ User must [install python Eikon Data API](https://developers.refinitiv.com/eikon
 import eikon as ek
 import matplotlib.pyplot as plt
 import pandas as pd
-import numpy as np
-from matplotlib import dates
-from mpl_finance import candlestick_ohlc
+import seaborn as sns
 from datetime import datetime
-from pandas.plotting import register_matplotlib_converters
-register_matplotlib_converters()
-
-%matplotlib inline
-ek.set_app_key('<Your Eikon App Key>')
-itemName="MSFT.O"
-dateStart="2014-01-01"
-dateEnd=datetime.now()
-
-# request time series data with adjusted close price
-df_adjustOHLC=ek.get_timeseries(itemName,fields=["Open","High","Low","Close","Volume" ], start_date = dateStart , 
-                                end_date = dateEnd , interval='daily', corax = 'adjusted' )
+import numpy as np
+from matplotlib.dates import DateFormatter, WeekdayLocator,DayLocator, MONDAY
+from mpl_finance import candlestick_ohlc
 ```
 
 
@@ -50,23 +40,37 @@ import numpy as np
 from matplotlib import dates
 from mpl_finance import candlestick_ohlc
 from datetime import datetime
-
+from pandas.plotting import register_matplotlib_converters
+register_matplotlib_converters()
 %matplotlib inline
-ek.set_app_key('7bdffe94ef7f48a7a70d7511e5a5fd4cd6b0989a')
-itemName="MSFT.O"
-dateStart="2014-01-01"
-dateEnd=datetime.now()
 
-# request time series data with adjusted close price
-df_adjustOHLC=ek.get_timeseries(itemName,fields=["Open","High","Low","Close","Volume" ], start_date = dateStart , 
+try:
+    ek.set_app_key('<Your Eikon APP Key>')
+    itemName="MSFT.O"
+    dateStart="2014-01-01"
+    dateEnd=datetime.now()
+
+    # request time series data with adjusted close price
+    df_adjustOHLC=ek.get_timeseries(itemName,fields=["Open","High","Low","Close","Volume" ], start_date = dateStart , 
                                 end_date = dateEnd , interval='daily', corax = 'adjusted' )
-
+except ek.EikonError as ex:
+    print('Eikon Error')
+    print(ex)
+except Exception as ex:
+    print(ex)
 ```
-From the snippet codes provided above, we use method [get_timeseries](https://docs-developers.refinitiv.com/1565330791086/14684/book/en/eikon/index.html#get_timeseries) to get daily close price and we set Corax to 'adjusted' to get adjusted close price. 
+From the snippet codes provided above, we use method get_timeseries to get daily close price and we set Corax to 'adjusted' to get adjusted close price.
 
-To run this example you have to change <AppKey>, __itemName__, __datestart__ and __dateEnd__ to a period of time you want to retrieve. I set a dateStart since 2014 because I can shorten a period of time later from the dataframe. 
-    
+To run this example you have to change , itemName, datestart and dateEnd to a period of time you want to retrieve. I set a dateStart since 2014 because I can shorten a period of time later from the dataframe.
+
 Below is sample data returned by the method. We call dataframe.head and dataframe.tail to print the data from the dataframe.
+
+## Retrieve a Time Series data using Eikon Data API
+
+To use Eikon data API, the user has to start Eikon and they must install the Eikon Python library and then generate AppID at the first steps. Please find the following [quick start guide](https://developers.refinitiv.com/eikon-apis/eikon-data-api/quick-start) to install the Eikon Python library. A developer can find a document regarding the methods available for the Python API from [Eikon Data API for Python Dev guide](https://docs-developers.refinitiv.com/1565330791086/14684/book/en/index.html).
+
+To request a TimeSeries data, a developer can use method [get_timeseries](https://docs-developers.refinitiv.com/1565330791086/14684/book/en/eikon/index.html#get_timeseries) to retrieve the data.
+Typically, user can specify RIC name, a period of times/interval and a field list such as Open, High, Low and Close price when requesting the data.
 
 ```python
 print('Row count=',len(df_adjustOHLC.index))
